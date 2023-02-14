@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dialogs/flutter_dialogs.dart';
 
 void main() {
   runApp(const MyApp());
@@ -45,6 +46,8 @@ class _MyAppState extends State<MyApp> {
     }
 
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'BMI calculator',
         home: Scaffold(
             appBar: AppBar(
               title: Text('BMI'),
@@ -230,6 +233,7 @@ class Imperial extends StatelessWidget {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
                       double bmi = BMI(ft: ft, In: In, lbs: lbs);
+                      bmiDialog(bmi, context);
                     }
                   },
                   child: Text('Calculate BMI')),
@@ -288,6 +292,7 @@ class Metric extends StatelessWidget {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
                       double bmi = BMI(kg: kg, cm: cm);
+                      bmiDialog(bmi, context);
                     }
                   },
                   child: Text('Calculate BMI')),
@@ -315,4 +320,40 @@ double BMI(
     double bmi = kg / (height * height);
     return bmi;
   }
+}
+
+Future bmiDialog(double bmi, context) async {
+  String category;
+  if (bmi < 18.5) {
+    category = 'Underweight';
+  } else if (bmi >= 18.5 && bmi <= 24.9) {
+    category = 'Normal Weight';
+  } else if (bmi > 24.9 && bmi <= 29.9) {
+    category = 'Overweight';
+  } else {
+    category = 'Obese';
+  }
+  await showPlatformDialog(
+      context: context,
+      builder: (context) => BasicDialogAlert(
+            title: Text(category),
+            content: Card(
+                child: Container(
+                  alignment: Alignment.center,
+              height: 110,
+              width: 110,
+              child: Text(
+                bmi.toStringAsFixed(1),
+                style: TextStyle(fontSize: 50),
+                ),
+            )),
+            actions: [
+              BasicDialogAction(
+                title: Text('Ok'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          ));
 }
