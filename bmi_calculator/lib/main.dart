@@ -15,7 +15,7 @@ class _MyAppState extends State<MyApp> {
   double age = 1;
   int _index = 0;
   bool male = true, female = false;
-  
+
   @override
   Widget build(BuildContext context) {
     Widget page;
@@ -157,6 +157,7 @@ class Imperial extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+    double ft = 0.0, In = 0.0, lbs = 0.0;
 
     return Form(
         key: _formKey,
@@ -177,7 +178,11 @@ class Imperial extends StatelessWidget {
                           }
                           return null;
                         },
-                        onSaved: (value) {},
+                        onSaved: (value) {
+                          if (value!.length > 0) {
+                            ft = double.parse(value);
+                          }
+                        },
                       ),
                     ),
                     Expanded(
@@ -190,7 +195,11 @@ class Imperial extends StatelessWidget {
                           }
                           return null;
                         },
-                        onSaved: (value) {},
+                        onSaved: (value) {
+                          if (value!.length > 0) {
+                            In = double.parse(value);
+                          }
+                        },
                       ),
                     ),
                   ],
@@ -208,10 +217,22 @@ class Imperial extends StatelessWidget {
                       }
                       return null;
                     },
-                    onSaved: (value) {},
+                    onSaved: (value) {
+                      if (value!.length > 0) {
+                        lbs = double.parse(value);
+                      }
+                    },
                   ),
                 ),
               ),
+              ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.save();
+                      double bmi = BMI(ft: ft, In: In, lbs: lbs);
+                    }
+                  },
+                  child: Text('Calculate BMI')),
             ],
           ),
         ));
@@ -224,6 +245,7 @@ class Metric extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+    double cm = 0.0, kg = 0.0;
 
     return Form(
         key: _formKey,
@@ -240,7 +262,11 @@ class Metric extends StatelessWidget {
                   }
                   return null;
                 },
-                onSaved: (value) {},
+                onSaved: (value) {
+                  if (value!.length > 0) {
+                    cm = double.parse(value);
+                  }
+                },
               ),
               TextFormField(
                 keyboardType: TextInputType.number,
@@ -251,10 +277,42 @@ class Metric extends StatelessWidget {
                   }
                   return null;
                 },
-                onSaved: (value) {},
+                onSaved: (value) {
+                  if (value!.length > 0) {
+                    kg = double.parse(value);
+                  }
+                },
               ),
+              ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.save();
+                      double bmi = BMI(kg: kg, cm: cm);
+                    }
+                  },
+                  child: Text('Calculate BMI')),
             ],
           ),
         ));
+  }
+}
+
+double BMI(
+    {double ft = 0.0,
+    double In = 0.0,
+    double lbs = 0.0,
+    double cm = 0.0,
+    double kg = 0.0}) {
+  if (ft > 0) {
+    //imperial measurements used
+    double height = (ft * 0.3048) + (In * 0.0254);
+    double weight = (lbs * 0.45359237);
+    double bmi = weight / (height * height);
+    return bmi;
+  } else {
+    //metric measurements used
+    double height = cm / 100;
+    double bmi = kg / (height * height);
+    return bmi;
   }
 }
