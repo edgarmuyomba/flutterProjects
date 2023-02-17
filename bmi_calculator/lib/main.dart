@@ -27,7 +27,7 @@ class _MyAppState extends State<MyApp> {
       default:
         throw UnimplementedError('No page at $_index');
     }
-    
+
     return MaterialApp(
         home: Scaffold(
             appBar: AppBar(
@@ -42,7 +42,11 @@ class _MyAppState extends State<MyApp> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       ElevatedButton(
-                          onPressed: null,
+                          onPressed: () {
+                            setState(() {
+                              _index = 0;
+                            });
+                          },
                           child: Text('Imperial'),
                           style: ButtonStyle(
                               shape: MaterialStateProperty.all<
@@ -52,7 +56,11 @@ class _MyAppState extends State<MyApp> {
                                           BorderRadius.circular(18.0))))),
                       SizedBox(width: 10),
                       ElevatedButton(
-                          onPressed: null,
+                          onPressed: () {
+                            setState(() {
+                              _index = 1;
+                            });
+                          },
                           child: Text('Metric'),
                           style: ButtonStyle(
                               shape: MaterialStateProperty.all<
@@ -88,6 +96,7 @@ class _MyAppState extends State<MyApp> {
                           age = value.truncateToDouble();
                         });
                       }),
+                  page,
                 ],
               ),
             ))));
@@ -119,5 +128,96 @@ class BigCard extends StatelessWidget {
             )),
       ),
     );
+  }
+}
+
+class Imperial extends StatelessWidget {
+  const Imperial({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+    return Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            Row(
+              children: [
+                TextFormField(
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(labelText: 'ft'),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter a value';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {},
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(labelText: 'In'),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter a value';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {},
+                ),
+              ],
+            ),
+            TextFormField(
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: 'lbs'),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Please enter a value';
+                }
+                return null;
+              },
+              onSaved: (value) {},
+            ),
+          ],
+        ));
+  }
+}
+
+class Metric extends StatelessWidget {
+  const Metric({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+    return Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            TextFormField(
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: 'cm'),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Please enter a value';
+                }
+                return null;
+              },
+              onSaved: (value) {},
+            ),
+            TextFormField(
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: 'kg'),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Please enter a value';
+                }
+                return null;
+              },
+              onSaved: (value) {},
+            ),
+          ],
+        ));
   }
 }
