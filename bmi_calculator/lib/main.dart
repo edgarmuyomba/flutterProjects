@@ -12,8 +12,22 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  double age = 1;
+  int _index = 0;
   @override
   Widget build(BuildContext context) {
+    Widget page;
+    switch (_index) {
+      case 0:
+        page = Imperial();
+        break;
+      case 1:
+        page = Metric();
+        break;
+      default:
+        throw UnimplementedError('No page at $_index');
+    }
+    
     return MaterialApp(
         home: Scaffold(
             appBar: AppBar(
@@ -53,8 +67,27 @@ class _MyAppState extends State<MyApp> {
                     children: [
                       BigCard(sign: Icons.male),
                       BigCard(sign: Icons.female),
-                      ],
-                  )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('     Age (1 and above years)'),
+                      Text(age.toString() + '   '),
+                    ],
+                  ),
+                  Slider(
+                      min: 1,
+                      max: 100,
+                      value: age,
+                      onChanged: (value) {
+                        setState(() {
+                          age = value.truncateToDouble();
+                        });
+                      }),
                 ],
               ),
             ))));
@@ -62,7 +95,6 @@ class _MyAppState extends State<MyApp> {
 }
 
 class BigCard extends StatelessWidget {
-
   final IconData sign;
 
   const BigCard({super.key, required this.sign});
