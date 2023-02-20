@@ -1,7 +1,7 @@
 class Task {
   String description;
   DateTime due;
-  String status;
+  String status = 'Incomplete';
 
   Task(
     this.description,
