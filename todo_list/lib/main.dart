@@ -27,6 +27,11 @@ class MyAppState extends ChangeNotifier {
     Tasks.add(task);
     notifyListeners();
   }
+
+  void _deleteTask(Task task) {
+    Tasks.remove(task);
+    notifyListeners();
+  }
 }
 
 class homePage extends StatefulWidget {
@@ -42,6 +47,7 @@ class _homePageState extends State<homePage> {
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
     List tasks = appState.Tasks;
+    TextEditingController _description = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
@@ -69,6 +75,12 @@ class _homePageState extends State<homePage> {
                   }
                 },
               ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Details(task: task)),
+                );
+              },
               title: Text(
                 task.description,
                 style: TextStyle(
@@ -88,43 +100,121 @@ class _homePageState extends State<homePage> {
             String description = '';
             showModalBottomSheet(
                 context: context,
+                isScrollControlled: true,
                 builder: (context) {
                   return Container(
-                    padding: EdgeInsets.all(16),
-                    child: Form(
-                      key: this._formKey,
-                      child: Row(children: [
-                        Expanded(
-                          child: TextFormField(
-                            decoration:
-                                InputDecoration(labelText: 'Description'),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Enter a short description of the task';
-                              }
-                              return null;
-                            },
-                            onSaved: (value) {
-                              description = value.toString();
-                            },
+                    padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom),
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Form(
+                        key: this._formKey,
+                        child: Row(children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: _description,
+                              decoration:
+                                  InputDecoration(labelText: 'Description'),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Enter a short description of the task';
+                                }
+                                return null;
+                              },
+                              onSaved: (value) {
+                                description = value.toString();
+                              },
+                            ),
                           ),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.arrow_circle_up_rounded),
-                          onPressed: () {
-                            var isValid = _formKey.currentState!.validate();
-                            if (isValid) {
-                              _formKey.currentState!.save();
-                              Task task = Task(description: description);
-                              appState._addTask(task);
-                            }
-                          },
-                        )
-                      ]),
+                          IconButton(
+                            icon: Icon(Icons.arrow_circle_up_rounded),
+                            onPressed: () {
+                              var isValid = _formKey.currentState!.validate();
+                              if (isValid) {
+                                _formKey.currentState!.save();
+                                Task task = Task(description: description);
+                                appState._addTask(task);
+                                _formKey.currentState!.reset();
+                                _description.clear();
+                              }
+                            },
+                          )
+                        ]),
+                      ),
                     ),
                   );
                 });
           }),
     );
+  }
+}
+
+class Details extends StatefulWidget {
+  final Task task;
+
+  const Details({super.key, required this.task});
+
+  @override
+  State<Details> createState() => _DetailsState();
+}
+
+class _DetailsState extends State<Details> {
+  @override
+  Widget build(BuildContext context) {
+    Task task = widget.task;
+    TextEditingController _details = TextEditingController();
+    GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+    var appState = context.watch<MyAppState>();
+
+    return Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+              icon: Icon(Icons.arrow_back_outlined),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+          title: Text(task.description),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.delete_outline),
+              onPressed: () {
+                appState._deleteTask(task);
+                Navigator.pop(context);
+              },
+            )
+          ],
+        ),
+        body: Center(
+            child: Column(
+          children: [
+            Form(
+                key: _formKey,
+                child: TextFormField(
+                  initialValue:
+                      task.details.length > 0 ? task.description : null,
+                  controller: _details,
+                  decoration: InputDecoration(
+                      labelText: 'Enter details about the task...'),
+                  onSaved: (value) {
+                    if (value!.length > 0) {
+                      setState(() {
+                        task.details = value.toString();
+                      });
+                    } else {
+                      setState(() {
+                        task.details = '';
+                      });
+                    }
+                  },
+                )),
+            ElevatedButton(
+              onPressed: () {
+                _formKey.currentState!.save();
+                FocusScope.of(context).unfocus();
+              },
+              child: Text('Save'),
+            )
+          ],
+        )));
   }
 }
