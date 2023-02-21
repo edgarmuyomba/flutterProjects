@@ -49,35 +49,53 @@ class _homePageState extends State<homePage> {
       ),
       body: Center(
           child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           for (var task in tasks)
             ListTile(
               leading: IconButton(
-                icon: Icon(
-                  Icons.radio_button_off,
-                ),
-                onPressed: null,
+                icon: task.status == 'Complete'
+                    ? Icon(Icons.radio_button_checked_sharp)
+                    : Icon(Icons.radio_button_off),
+                onPressed: () {
+                  if (task.status == 'Incomplete') {
+                    setState(() {
+                      task.status = 'Complete';
+                    });
+                  } else {
+                    setState(() {
+                      task.status = 'Incomplete';
+                    });
+                  }
+                },
               ),
-              title: task.description,
-              subtitle: task.due,
+              title: Text(
+                task.description,
+                style: TextStyle(
+                  decoration: task.status == 'Complete'
+                      ? TextDecoration.lineThrough
+                      : null,
+                  decorationColor: Colors.grey[700],
+                  decorationThickness: 2.0,
+                ),
+              ),
             )
         ],
       )),
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        String description = '';
-        DateTime due;
-        showModalBottomSheet(
-            context: context,
-            builder: (context) {
-              return Container(
-                padding: EdgeInsets.all(16),
-                child: Form(
-                    key: this._formKey,
-                    child: Column(
-                      children: [
-                        Row(children: [
-                          TextFormField(
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            String description = '';
+            showModalBottomSheet(
+                context: context,
+                builder: (context) {
+                  return Container(
+                    padding: EdgeInsets.all(16),
+                    child: Form(
+                      key: this._formKey,
+                      child: Row(children: [
+                        Expanded(
+                          child: TextFormField(
                             decoration:
                                 InputDecoration(labelText: 'Description'),
                             validator: (value) {
@@ -90,23 +108,23 @@ class _homePageState extends State<homePage> {
                               description = value.toString();
                             },
                           ),
-                          IconButton(
-                            icon: Icon(Icons.arrow_circle_up_rounded),
-                            onPressed: () {
-                              var isValid = _formKey.currentState!.validate();
-                              if (isValid) {
-                                _formKey.currentState!.save();
-                                Task task = Task(description);
-                              }
-                            },
-                          )
-                        ]),
-                        //add implementation for a datetime picker!
-                      ],
-                    )),
-              );
-            });
-      }),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.arrow_circle_up_rounded),
+                          onPressed: () {
+                            var isValid = _formKey.currentState!.validate();
+                            if (isValid) {
+                              _formKey.currentState!.save();
+                              Task task = Task(description: description);
+                              appState._addTask(task);
+                            }
+                          },
+                        )
+                      ]),
+                    ),
+                  );
+                });
+          }),
     );
   }
 }

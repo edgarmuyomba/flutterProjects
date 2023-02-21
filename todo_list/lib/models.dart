@@ -1,11 +1,9 @@
 class Task {
   String description;
-  DateTime due;
-  String status = 'Incomplete';
+  String status;
 
-  Task(
-    this.description,
-    this.due,
-    this.status,
-  );
+  Task({
+    required this.description,
+    this.status = 'Incomplete',
+  });
 }
