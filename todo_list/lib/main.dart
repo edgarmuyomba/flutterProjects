@@ -162,7 +162,6 @@ class _DetailsState extends State<Details> {
   @override
   Widget build(BuildContext context) {
     Task task = widget.task;
-    TextEditingController _details = TextEditingController();
     GlobalKey<FormState> _formKey = GlobalKey<FormState>();
     var appState = context.watch<MyAppState>();
 
@@ -171,6 +170,7 @@ class _DetailsState extends State<Details> {
           leading: IconButton(
               icon: Icon(Icons.arrow_back_outlined),
               onPressed: () {
+                _formKey.currentState!.save();
                 Navigator.pop(context);
               }),
           title: Text(task.description),
@@ -185,36 +185,35 @@ class _DetailsState extends State<Details> {
           ],
         ),
         body: Center(
-            child: Column(
-          children: [
-            Form(
-                key: _formKey,
-                child: TextFormField(
-                  initialValue:
-                      task.details.length > 0 ? task.description : null,
-                  controller: _details,
-                  decoration: InputDecoration(
-                      labelText: 'Enter details about the task...'),
-                  onSaved: (value) {
-                    if (value!.length > 0) {
-                      setState(() {
-                        task.details = value.toString();
-                      });
-                    } else {
-                      setState(() {
-                        task.details = '';
-                      });
-                    }
-                  },
-                )),
-            ElevatedButton(
-              onPressed: () {
-                _formKey.currentState!.save();
-                FocusScope.of(context).unfocus();
-              },
-              child: Text('Save'),
-            )
-          ],
+            child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        initialValue:
+                            task.details.length > 0 ? task.details : '',
+                        decoration: InputDecoration(
+                            labelText: 'Enter details about the task...'),
+                        onSaved: (value) {
+                          if (value!.length > 0) {
+                            setState(() {
+                              task.details = value.toString();
+                            });
+                          } else {
+                            setState(() {
+                              task.details = '';
+                            });
+                          }
+                        },
+                      ),
+                    ],
+                  )),
+            ],
+          ),
         )));
   }
 }
