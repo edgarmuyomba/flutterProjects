@@ -49,6 +49,7 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         title: 'BMI calculator',
         home: Scaffold(
+          resizeToAvoidBottomInset: false,
             appBar: AppBar(
               title: Text('BMI'),
             ),
@@ -121,6 +122,15 @@ class _MyAppState extends State<MyApp> {
                         });
                       }),
                   page,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text('Designed in pain '),
+                      Icon(Icons.heart_broken),
+                      Text(' by Edgar!'),
+                    ],
+                  )
                 ],
               ),
             ))));
