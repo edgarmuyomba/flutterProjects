@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather/homePage.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,7 +15,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   var _currentPage = 0;
   var _pages = [
-    Text('Home Page'),
+    homePage(),
     Text('Search Page'),
     Text('Saved'),
     Text('Profile')
