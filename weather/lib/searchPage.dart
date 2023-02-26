@@ -29,7 +29,7 @@ class _searchPageState extends State<searchPage> {
             key: _formKey,
             child: TextFormField(
               decoration: InputDecoration(
-                  labelText: 'Search for a location',
+                  labelText: 'Search',
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(25.0)),
                   prefixIcon: Icon(Icons.search),

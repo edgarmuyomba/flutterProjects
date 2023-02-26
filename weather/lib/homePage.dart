@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weather/searchPage.dart';
+import 'package:weather/settingsPage.dart';
 
 class homePage extends StatefulWidget {
   const homePage({super.key});
@@ -28,7 +29,7 @@ class _homePageState extends State<homePage> {
                   iconSize: 40,
                 ),
                 IconButton(
-                  onPressed: null,
+                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => settingsPage())),
                   icon: Icon(Icons.segment_outlined),
                   iconSize: 40,
                 )
