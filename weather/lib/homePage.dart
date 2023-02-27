@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:weather/searchPage.dart';
 import 'package:weather/settingsPage.dart';
+import 'package:geolocator/geolocator.dart';
 
 class homePage extends StatefulWidget {
   const homePage({super.key});
@@ -24,12 +25,18 @@ class _homePageState extends State<homePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
-                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => searchPage())),
+                  onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => searchPage())),
                   icon: Icon(Icons.search),
                   iconSize: 40,
                 ),
                 IconButton(
-                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => settingsPage())),
+                  onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => settingsPage())),
                   icon: Icon(Icons.segment_outlined),
                   iconSize: 40,
                 )
