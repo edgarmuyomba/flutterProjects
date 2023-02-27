@@ -25,7 +25,6 @@ class _homePageState extends State<homePage> {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
               final response = snapshot.data;
-              print(response!.city);
               return Scaffold(
                 body: Center(
                     child: SingleChildScrollView(
@@ -69,20 +68,20 @@ class _homePageState extends State<homePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Berlin,',
+                                  response!.city,
                                   style: TextStyle(
                                     fontSize: 30,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
                                 Text(
-                                  'Germany',
+                                  response.country,
                                   style: TextStyle(
                                       fontSize: 30,
                                       fontWeight: FontWeight.w500),
                                 ),
                                 Text(
-                                  '13C',
+                                  response.temp.toString(),
                                   style: TextStyle(
                                       fontSize: 45,
                                       fontWeight: FontWeight.bold),
