@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather/searchPage.dart';
 
 class homePage extends StatefulWidget {
   const homePage({super.key});
@@ -16,7 +17,25 @@ class _homePageState extends State<homePage> {
         child: Column(
           children: [
             SizedBox(
-              height: 120,
+              height: 70,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => searchPage())),
+                  icon: Icon(Icons.search),
+                  iconSize: 40,
+                ),
+                IconButton(
+                  onPressed: null,
+                  icon: Icon(Icons.segment_outlined),
+                  iconSize: 40,
+                )
+              ],
+            ),
+            SizedBox(
+              height: 30,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
