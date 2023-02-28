@@ -42,7 +42,7 @@ void main() {
     for (int i = 0; i < 8; i++) {
       var time = value.forecasts[i]['dt_txt'];
       var temp = value.forecasts[i]['main']['temp'];
-      print('$temp at $time\n');
+      print('$time\n');
     }
   });
 }

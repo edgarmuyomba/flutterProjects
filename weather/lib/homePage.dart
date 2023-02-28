@@ -80,11 +80,24 @@ class _homePageState extends State<homePage> {
                                       fontSize: 30,
                                       fontWeight: FontWeight.w500),
                                 ),
-                                Text(
-                                  temperature(response.forecasts[0]['main']['temp']),
-                                  style: TextStyle(
-                                      fontSize: 45,
-                                      fontWeight: FontWeight.bold),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      temperature(
+                                          response.forecasts[0]['main']['temp'],
+                                          2),
+                                      style: TextStyle(
+                                          fontSize: 45,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      "\u2103",
+                                      style: TextStyle(
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                  ],
                                 )
                               ],
                             ),
@@ -155,12 +168,38 @@ class _homePageState extends State<homePage> {
                           scrollDirection: Axis.horizontal,
                           child: Row(
                             children: [
-                              BigCard(temperature: '12C', time: '6am'),
-                              BigCard(temperature: '15C', time: '9am'),
-                              BigCard(temperature: '20C', time: '12pm'),
-                              BigCard(temperature: '25C', time: '3pm'),
-                              BigCard(temperature: '30C', time: '6pm'),
-                              BigCard(temperature: '35C', time: '9pm'),
+                              BigCard(
+                                  temperature: temperature(
+                                      response.forecasts[0]['main']['temp'], 0),
+                                  time: '6am'),
+                              BigCard(
+                                  temperature: temperature(
+                                      response.forecasts[1]['main']['temp'], 0),
+                                  time: '9am'),
+                              BigCard(
+                                  temperature: temperature(
+                                      response.forecasts[2]['main']['temp'], 0),
+                                  time: '12pm'),
+                              BigCard(
+                                  temperature: temperature(
+                                      response.forecasts[3]['main']['temp'], 0),
+                                  time: '3pm'),
+                              BigCard(
+                                  temperature: temperature(
+                                      response.forecasts[4]['main']['temp'], 0),
+                                  time: '6pm'),
+                              BigCard(
+                                  temperature: temperature(
+                                      response.forecasts[5]['main']['temp'], 0),
+                                  time: '9pm'),
+                              BigCard(
+                                  temperature: temperature(
+                                      response.forecasts[6]['main']['temp'], 0),
+                                  time: '9pm'),
+                              BigCard(
+                                  temperature: temperature(
+                                      response.forecasts[7]['main']['temp'], 0),
+                                  time: '9pm'),
                             ],
                           )),
                       SizedBox(
@@ -382,9 +421,19 @@ class BigCard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              temperature,
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  temperature,
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  "\u2103",
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                ),
+              ],
             ),
             Text(time)
           ],
@@ -434,8 +483,8 @@ Future<weatherData> _determinePosition() async {
   }
 }
 
-String temperature(double kelvin) {
+String temperature(var kelvin, int deg) {
   double temp = kelvin - 272.15;
-  String Temp = temp.toStringAsFixed(2) + "\u2103";
+  String Temp = temp.toStringAsFixed(deg);
   return Temp;
 }
