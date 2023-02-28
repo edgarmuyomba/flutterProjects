@@ -450,7 +450,9 @@ class _homePageState extends State<homePage> {
               return Scaffold(body: Center(child: Text('No Location Data')));
             }
           } else {
-            return CircularProgressIndicator();
+            return Scaffold(
+              body: Center(child: loading())
+              );
           }
         });
   }

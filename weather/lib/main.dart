@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather/citySearch.dart';
 import 'package:weather/homePage.dart';
 
 void main() {
@@ -16,11 +17,12 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: "The Weather App",
-        home: Scaffold(
-            body: Center(
-          child: homePage(),
-        )));
+      debugShowCheckedModeBanner: false,
+      title: "The Weather App",
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const homePage(),
+      },
+    );
   }
 }

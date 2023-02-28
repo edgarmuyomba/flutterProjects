@@ -33,7 +33,7 @@ class _searchState extends State<search> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           IconButton(
-                            onPressed: () => Navigator.pop(context),
+                            onPressed: () => Navigator.pushNamed(context, '/'),
                             icon: Icon(Icons.arrow_back_outlined),
                             iconSize: 40,
                           )
@@ -437,7 +437,9 @@ class _searchState extends State<search> {
               return Scaffold(body: Center(child: Text('No Location Data')));
             }
           } else {
-            return CircularProgressIndicator();
+            return Scaffold(
+              body: Center(child: loading())
+              );
           }
         });
   }
