@@ -171,35 +171,35 @@ class _homePageState extends State<homePage> {
                               BigCard(
                                   temperature: temperature(
                                       response.forecasts[0]['main']['temp'], 0),
-                                  time: '6am'),
+                                  time: time(response.forecasts[0]['dt_txt'])),
                               BigCard(
                                   temperature: temperature(
                                       response.forecasts[1]['main']['temp'], 0),
-                                  time: '9am'),
+                                  time: time(response.forecasts[1]['dt_txt'])),
                               BigCard(
                                   temperature: temperature(
                                       response.forecasts[2]['main']['temp'], 0),
-                                  time: '12pm'),
+                                  time: time(response.forecasts[2]['dt_txt'])),
                               BigCard(
                                   temperature: temperature(
                                       response.forecasts[3]['main']['temp'], 0),
-                                  time: '3pm'),
+                                  time: time(response.forecasts[3]['dt_txt'])),
                               BigCard(
                                   temperature: temperature(
                                       response.forecasts[4]['main']['temp'], 0),
-                                  time: '6pm'),
+                                  time: time(response.forecasts[4]['dt_txt'])),
                               BigCard(
                                   temperature: temperature(
                                       response.forecasts[5]['main']['temp'], 0),
-                                  time: '9pm'),
+                                  time: time(response.forecasts[5]['dt_txt'])),
                               BigCard(
                                   temperature: temperature(
                                       response.forecasts[6]['main']['temp'], 0),
-                                  time: '9pm'),
+                                  time: time(response.forecasts[6]['dt_txt'])),
                               BigCard(
                                   temperature: temperature(
                                       response.forecasts[7]['main']['temp'], 0),
-                                  time: '9pm'),
+                                  time: time(response.forecasts[7]['dt_txt'])),
                             ],
                           )),
                       SizedBox(
@@ -487,4 +487,19 @@ String temperature(var kelvin, int deg) {
   double temp = kelvin - 272.15;
   String Temp = temp.toStringAsFixed(deg);
   return Temp;
+}
+
+String time(var clock) {
+  List timelist = clock.split(' ');
+  clock = timelist[1].split(':');
+  clock = clock[0];
+  if (int.parse(clock) >= 12) {
+    clock = clock + 'pm';
+  } else {
+    clock = clock + 'am';
+  }
+  if (clock == '00am') {
+    clock = '12am';
+  }
+  return clock;
 }

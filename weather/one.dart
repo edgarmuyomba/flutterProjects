@@ -42,6 +42,12 @@ void main() {
     for (int i = 0; i < 8; i++) {
       var time = value.forecasts[i]['dt_txt'];
       var temp = value.forecasts[i]['main']['temp'];
+      List timelist = time.split(' ');
+      time = timelist[1].split(':');
+      time = time[0];
+      if (int.parse(time) == 0) {
+        time = '12';
+      }
       print('$time\n');
     }
   });
