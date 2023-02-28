@@ -3,6 +3,7 @@ import 'dart:convert';
 
 // icon url - "http://openweathermap.org/img/w/" + iconcode + ".png"
 //api url - http://api.openweathermap.org/data/2.5/forecast?q={cityName}&appid=047f8110fe6519e1f7ed701d95b7bbd0
+// geocoding url - http://api.openweathermap.org/geo/1.0/reverse?lat=51.5098&lon=-0.1180&limit=2&appid=047f8110fe6519e1f7ed701d95b7bbd0
 
 Future<weatherData> fetchData(city) async {
   final response = await http.get(Uri.parse(
@@ -20,21 +21,16 @@ Future<weatherData> fetchData(city) async {
 class weatherData {
   final String city;
   final String country;
-  final double lat;
-  final double lon;
+  final List forecasts;
 
   const weatherData(
-      {required this.city,
-      required this.country,
-      required this.lat,
-      required this.lon});
+      {required this.city, required this.country, required this.forecasts});
 
   factory weatherData.fromJson(Map<String, dynamic> json) {
     return weatherData(
         city: json['city']['name'],
         country: json['city']['country'],
-        lat: json['city']['coord']['lat'],
-        lon: json['city']['coord']['lon']);
+        forecasts: json['list']);
   }
 }
 
@@ -43,6 +39,10 @@ void main() {
   Kampala.then((value) {
     print(value.city);
     print(value.country);
-    print(value.lat.toString() + ' ' + value.lon.toString());
+    for (int i = 0; i < 8; i++) {
+      var time = value.forecasts[i]['dt_txt'];
+      var temp = value.forecasts[i]['main']['temp'];
+      print('$temp at $time\n');
+    }
   });
 }

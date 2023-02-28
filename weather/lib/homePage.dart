@@ -81,7 +81,7 @@ class _homePageState extends State<homePage> {
                                       fontWeight: FontWeight.w500),
                                 ),
                                 Text(
-                                  response.temp.toString(),
+                                  temperature(response.forecasts[0]['main']['temp']),
                                   style: TextStyle(
                                       fontSize: 45,
                                       fontWeight: FontWeight.bold),
@@ -432,4 +432,10 @@ Future<weatherData> _determinePosition() async {
   } else {
     throw Exception('Failed to load Data!');
   }
+}
+
+String temperature(double kelvin) {
+  double temp = kelvin - 272.15;
+  String Temp = temp.toStringAsFixed(2) + "\u2103";
+  return Temp;
 }
