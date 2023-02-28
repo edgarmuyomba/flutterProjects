@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:weather/models.dart';
-import 'package:weather/settingsPage.dart';
 import 'utils.dart';
 
-class homePage extends StatefulWidget {
-  const homePage({super.key});
+class search extends StatefulWidget {
+  final String city;
+  const search({super.key, required this.city});
 
   @override
-  State<homePage> createState() => _homePageState();
+  State<search> createState() => _searchState();
 }
 
-class _homePageState extends State<homePage> {
+class _searchState extends State<search> {
   @override
   Widget build(BuildContext context) {
     List days = getDays();
+    String city = widget.city;
     return FutureBuilder(
-        future: determinePosition(),
+        future: searchWeather(city),
         builder: (BuildContext context, AsyncSnapshot<weatherData> snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
@@ -29,25 +30,11 @@ class _homePageState extends State<homePage> {
                         height: 70,
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           IconButton(
-                            onPressed: () {
-                              showSearch(
-                                context: context,
-                                delegate: CustomSearchDelegate(),
-                              );
-                            },
-                            icon: Icon(Icons.search),
-                            iconSize: 40,
-                          ),
-                          IconButton(
-                            onPressed: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        settingsPage())),
-                            icon: Icon(Icons.segment_outlined),
+                            onPressed: () => Navigator.pop(context),
+                            icon: Icon(Icons.arrow_back_outlined),
                             iconSize: 40,
                           )
                         ],

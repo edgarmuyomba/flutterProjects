@@ -5,6 +5,8 @@ import 'package:android_intent/android_intent.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'models.dart';
+import 'cities.dart';
+import 'citySearch.dart';
 
 class BigCard extends StatelessWidget {
   final String temperature;
@@ -128,5 +130,79 @@ Future<weatherData> determinePosition() async {
     return weatherData.fromJson(jsonDecode(response.body));
   } else {
     throw Exception('Failed to load Data!');
+  }
+}
+
+Future<weatherData> searchWeather(String city) async {
+  final response = await http.get(Uri.parse(
+      'http://api.openweathermap.org/data/2.5/forecast?q=' +
+          city +
+          '&appid=047f8110fe6519e1f7ed701d95b7bbd0'));
+  if (response.statusCode == 200) {
+    return weatherData.fromJson(jsonDecode(response.body));
+  } else {
+    throw Exception('Failed to load Data!');
+  }
+}
+
+class CustomSearchDelegate extends SearchDelegate {
+  List<String> searchTerms = cities;
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+          onPressed: () {
+            query = '';
+          },
+          icon: Icon(Icons.clear))
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+        onPressed: () {
+          close(context, null);
+        },
+        icon: Icon(Icons.arrow_back_ios));
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    List<String> matchQuery = [];
+    for (var city in searchTerms) {
+      if (city.toLowerCase().contains(query.toLowerCase())) {
+        matchQuery.add(city);
+      }
+    }
+    return ListView.builder(
+        itemCount: matchQuery.length,
+        itemBuilder: (context, index) {
+          var result = matchQuery[index];
+          return ListTile(
+            title: Text(result),
+          );
+        });
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    List<String> matchQuery = [];
+    for (var city in searchTerms) {
+      if (city.toLowerCase().contains(query.toLowerCase())) {
+        matchQuery.add(city);
+      }
+    }
+    return ListView.builder(
+        itemCount: matchQuery.length,
+        itemBuilder: (context, index) {
+          var result = matchQuery[index];
+          return ListTile(
+              title: Text(result),
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => search(city: result))));
+        });
   }
 }
