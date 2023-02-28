@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather/appTheme.dart';
 
 class settingsPage extends StatelessWidget {
   const settingsPage({super.key});
@@ -24,7 +25,8 @@ class settingsPage extends StatelessWidget {
             title: Text('Storage')
           ),
           ListTile(
-            title: Text('Theme')
+            title: Text('Theme'),
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => appTheme())),
           ),
           ListTile(
             title: Text('Weather')

@@ -10,9 +10,13 @@ class MyApp extends StatefulWidget {
 
   @override
   State<MyApp> createState() => _MyAppState();
+
+  static _MyAppState of(BuildContext context) => 
+      context.findAncestorStateOfType<_MyAppState>()!;
 }
 
 class _MyAppState extends State<MyApp> {
+  ThemeMode _themeMode = ThemeMode.system;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -22,6 +26,15 @@ class _MyAppState extends State<MyApp> {
       routes: {
         '/': (context) => const homePage(),
       },
+      theme: ThemeData(),
+      darkTheme: ThemeData.dark(),
+      themeMode: _themeMode,
     );
+  }
+
+  void changeTheme(ThemeMode themeMode) {
+    setState(() {
+      _themeMode = themeMode;
+    });
   }
 }
