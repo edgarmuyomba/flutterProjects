@@ -3,11 +3,11 @@ import 'package:weather/models.dart';
 import 'package:weather/searchPage.dart';
 import 'package:weather/settingsPage.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:android_intent/android_intent.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:weather/models.dart';
+import 'package:intl/intl.dart';
 
 class homePage extends StatefulWidget {
   const homePage({super.key});
@@ -19,6 +19,7 @@ class homePage extends StatefulWidget {
 class _homePageState extends State<homePage> {
   @override
   Widget build(BuildContext context) {
+    List days = getDays();
     return FutureBuilder(
         future: _determinePosition(),
         builder: (BuildContext context, AsyncSnapshot<weatherData> snapshot) {
@@ -115,10 +116,19 @@ class _homePageState extends State<homePage> {
                               alignment: Alignment.center,
                               height: 45,
                               width: 95,
-                              child: Text('6%',
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500)),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.cloud),
+                                  Text(
+                                      response.forecasts[0]['clouds']['all']
+                                              .toString() +
+                                          '%',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w500)),
+                                ],
+                              ),
                             ),
                           ),
                           Card(
@@ -129,10 +139,19 @@ class _homePageState extends State<homePage> {
                               alignment: Alignment.center,
                               height: 45,
                               width: 95,
-                              child: Text('90%',
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500)),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.thermostat),
+                                  Text(
+                                      response.forecasts[0]['main']['humidity']
+                                              .toString() +
+                                          '%',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w500)),
+                                ],
+                              ),
                             ),
                           ),
                           Card(
@@ -142,11 +161,20 @@ class _homePageState extends State<homePage> {
                             child: Container(
                               alignment: Alignment.center,
                               height: 45,
-                              width: 95,
-                              child: Text('19km/h',
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500)),
+                              width: 120,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.wind_power_outlined),
+                                  Text(
+                                      response.forecasts[0]['wind']['speed']
+                                              .toString() +
+                                          'm/s',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w500)),
+                                ],
+                              ),
                             ),
                           ),
                         ],
@@ -215,7 +243,7 @@ class _homePageState extends State<homePage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Monday',
+                                    days[0],
                                     style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.w500),
@@ -224,7 +252,7 @@ class _homePageState extends State<homePage> {
                                     height: 30,
                                   ),
                                   Text(
-                                    'Tuesday',
+                                    days[1],
                                     style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.w500),
@@ -233,7 +261,7 @@ class _homePageState extends State<homePage> {
                                     height: 30,
                                   ),
                                   Text(
-                                    'Wednesday',
+                                    days[2],
                                     style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.w500),
@@ -242,7 +270,7 @@ class _homePageState extends State<homePage> {
                                     height: 30,
                                   ),
                                   Text(
-                                    'Thursday',
+                                    days[3],
                                     style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.w500),
@@ -251,25 +279,7 @@ class _homePageState extends State<homePage> {
                                     height: 30,
                                   ),
                                   Text(
-                                    'Friday',
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  SizedBox(
-                                    height: 30,
-                                  ),
-                                  Text(
-                                    'Saturday',
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  SizedBox(
-                                    height: 30,
-                                  ),
-                                  Text(
-                                    'Sunday',
+                                    days[4],
                                     style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.w500),
@@ -300,14 +310,6 @@ class _homePageState extends State<homePage> {
                                   ),
                                   Icon(Icons.cloud),
                                   SizedBox(
-                                    height: 35,
-                                  ),
-                                  Icon(Icons.cloud),
-                                  SizedBox(
-                                    height: 30,
-                                  ),
-                                  Icon(Icons.cloud),
-                                  SizedBox(
                                     height: 20,
                                   ),
                                 ],
@@ -318,65 +320,120 @@ class _homePageState extends State<homePage> {
                                   SizedBox(
                                     height: 5,
                                   ),
-                                  Text(
-                                    '13c',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        temperature(
+                                            response.forecasts[0]['main']
+                                                ['temp'],
+                                            0),
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      Text(
+                                        "\u2103",
+                                        style: TextStyle(
+                                            fontSize: 9,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                    ],
                                   ),
                                   SizedBox(
                                     height: 40,
                                   ),
-                                  Text(
-                                    '13c',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        temperature(
+                                            response.forecasts[8]['main']
+                                                ['temp'],
+                                            0),
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      Text(
+                                        "\u2103",
+                                        style: TextStyle(
+                                            fontSize: 9,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                    ],
                                   ),
                                   SizedBox(
                                     height: 35,
                                   ),
-                                  Text(
-                                    '13c',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        temperature(
+                                            response.forecasts[16]['main']
+                                                ['temp'],
+                                            0),
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      Text(
+                                        "\u2103",
+                                        style: TextStyle(
+                                            fontSize: 9,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                    ],
                                   ),
                                   SizedBox(
                                     height: 40,
                                   ),
-                                  Text(
-                                    '13c',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        temperature(
+                                            response.forecasts[24]['main']
+                                                ['temp'],
+                                            0),
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      Text(
+                                        "\u2103",
+                                        style: TextStyle(
+                                            fontSize: 9,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                    ],
                                   ),
                                   SizedBox(
                                     height: 35,
                                   ),
-                                  Text(
-                                    '13c',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  SizedBox(
-                                    height: 40,
-                                  ),
-                                  Text(
-                                    '13c',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  SizedBox(
-                                    height: 35,
-                                  ),
-                                  Text(
-                                    '13c',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        temperature(
+                                            response.forecasts[32]['main']
+                                                ['temp'],
+                                            0),
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      Text(
+                                        "\u2103",
+                                        style: TextStyle(
+                                            fontSize: 9,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                    ],
                                   ),
                                   SizedBox(
                                     height: 20,
@@ -502,4 +559,18 @@ String time(var clock) {
     clock = '12am';
   }
   return clock;
+}
+
+List getDays() {
+  List days = [];
+  var now = DateTime.now();
+  var formatter = DateFormat('EEEE');
+  var today = formatter.format(now);
+  days.add(today);
+  for (var i = 1; i <= 4; i++) {
+    var nextDay = now.add(Duration(days: i));
+    var dayOfWeek = formatter.format(nextDay);
+    days.add(dayOfWeek);
+  }
+  return days;
 }
