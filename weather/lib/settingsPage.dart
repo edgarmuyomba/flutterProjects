@@ -10,7 +10,7 @@ class settingsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Settings')
       ),
-      body: ListView(
+      body: Column(
         children: [
           ListTile(
             title: Text('Privacy')
@@ -31,6 +31,17 @@ class settingsPage extends StatelessWidget {
           ListTile(
             title: Text('Weather')
           ),
+          SizedBox(
+            height: 400,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Icon(Icons.copyright_outlined),
+              Text(' Edgar (2023)')
+            ],
+          )
         ],
       )
     );
