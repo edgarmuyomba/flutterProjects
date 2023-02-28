@@ -39,6 +39,6 @@ void main() {
   Kampala.then((value) {
     print(value.city);
     print(value.country);
-    print(value.forecasts[0]['main']['humidity']);
+    print(value.forecasts[0]['weather'][0]['icon']);
   });
 }

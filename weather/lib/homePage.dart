@@ -292,23 +292,23 @@ class _homePageState extends State<homePage> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Icon(Icons.cloud),
+                                  Image.network(iconUrl(response.forecasts[0]['weather'][0]['icon'])),
                                   SizedBox(
-                                    height: 35,
+                                    height: 15,
                                   ),
-                                  Icon(Icons.cloud),
-                                  SizedBox(
-                                    height: 30,
-                                  ),
-                                  Icon(Icons.cloud),
-                                  SizedBox(
-                                    height: 35,
-                                  ),
-                                  Icon(Icons.cloud),
+                                  Image.network(iconUrl(response.forecasts[8]['weather'][0]['icon'])),
                                   SizedBox(
                                     height: 30,
                                   ),
-                                  Icon(Icons.cloud),
+                                  Image.network(iconUrl(response.forecasts[16]['weather'][0]['icon'])),
+                                  SizedBox(
+                                    height: 35,
+                                  ),
+                                  Image.network(iconUrl(response.forecasts[24]['weather'][0]['icon'])),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+                                  Image.network(iconUrl(response.forecasts[32]['weather'][0]['icon'])),
                                   SizedBox(
                                     height: 20,
                                   ),
@@ -573,4 +573,10 @@ List getDays() {
     days.add(dayOfWeek);
   }
   return days;
+}
+
+String iconUrl(String data) {
+  String icon_url =
+      'http://openweathermap.org/img/w/' + data.toString() + '.png';
+  return icon_url;
 }
