@@ -1,7 +1,10 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 
 class receipeResults extends StatefulWidget {
-  const receipeResults({super.key});
+  final String attached;
+  const receipeResults({super.key, required this.attached});
 
   @override
   State<receipeResults> createState() => _receipeResultsState();
@@ -10,6 +13,24 @@ class receipeResults extends StatefulWidget {
 class _receipeResultsState extends State<receipeResults> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    String attached = widget.attached;
+    return Scaffold(
+      body: Center(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 50,
+            ),
+            Row(
+              children: [
+                IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: Icon(Icons.arrow_back_rounded)
+                  )
+              ],
+              ),
+            Text(attached),
+          ],
+        )));
   }
 }

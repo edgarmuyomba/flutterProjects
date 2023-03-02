@@ -18,6 +18,7 @@ class _homePageState extends State<homePage> {
             child: Form(
       key: _formKey,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           TextFormField(
             decoration: InputDecoration(
@@ -45,7 +46,7 @@ class _homePageState extends State<homePage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (BuildContext context) => receipeResults()));
+                        builder: (BuildContext context) => receipeResults(attached: attached)));
               }
             },
           )
@@ -56,7 +57,12 @@ class _homePageState extends State<homePage> {
 }
 
 String clean(astring) {
-  List splitted = astring.split(',');
+  List splitted = [];
+  if (astring.contains(',')) {
+    splitted = astring.split(',');
+  } else {
+    splitted = astring.split(' ');
+  }
   List finalList = [];
   for (String split in splitted) {
     finalList.add(split.trim());
