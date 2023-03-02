@@ -56,6 +56,7 @@ class ingredients {
 }
 
 Future<receipes> getReceipes(List ingredients) async {
+  //function to get the receipe from a set of ingredients
   String attach = '';
   for (int i = 0; i < ingredients.length; i++) {
     if (i == ingredients.length - 1) {
@@ -76,6 +77,7 @@ Future<receipes> getReceipes(List ingredients) async {
 }
 
 Future<ingredients> getIngredients(int id) async {
+  //function to get the ingredients and amounts for a particular receipe
   final response = await http.get(Uri.parse('https://api.spoonacular.com/recipes/' +
       id.toString() +
       '1003464/ingredientWidget.json?apiKey=a22788893f79434f8852f9589d773ce2'));
