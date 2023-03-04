@@ -1,5 +1,6 @@
 // receipe url - https://api.spoonacular.com/recipes/findByIngredients?ingredients=apples,+flour,+sugar&number=100&ranking=1&ignorePantry=false&apiKey=a22788893f79434f8852f9589d773ce2
 // ingredients url - https://api.spoonacular.com/recipes/1003464/ingredientWidget.json?apiKey=a22788893f79434f8852f9589d773ce2
+// instructions url - https://api.spoonacular.com/recipes/3456/analyzedInstructions?apiKey=a22788893f79434f8852f9589d773ce2
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -50,7 +51,7 @@ class receipes {
       List<missedIngredient> temp2 = [];
       for (int l = 0; l < k; l++) {
         temp2.add(missedIngredient(
-          name: json[j]['missedIngredients'][l]['orignal'],
+          name: json[j]['missedIngredients'][l]['original'],
         ));
       }
       temp.add(receipe(
@@ -88,8 +89,15 @@ class ingredients {
   });
 
   factory ingredients.fromJson(Map<String, dynamic> json) {
+    List temp = [];
+    int i = json['ingredients'].length;
+    for (int j = 0; j < i; j++) {
+      temp.add(ingredient(
+          name: json['ingredients'][j]['name'],
+          value: json['ingredients'][j]['amount']['metric']['value']));
+    }
     return ingredients(
-      details: json['ingredients'],
+      details: temp,
     );
   }
 }
@@ -127,9 +135,10 @@ Future<receipes> getReceipes(List ingredients) async {
 
 Future<ingredients> getIngredients(int id) async {
   //function to get the ingredients and amounts for a particular receipe
-  final response = await http.get(Uri.parse('https://api.spoonacular.com/recipes/' +
-      id.toString() +
-      '1003464/ingredientWidget.json?apiKey=a22788893f79434f8852f9589d773ce2'));
+  final response = await http.get(Uri.parse(
+      'https://api.spoonacular.com/recipes/' +
+          id.toString() +
+          '/ingredientWidget.json?apiKey=a22788893f79434f8852f9589d773ce2'));
   if (response.statusCode == 200) {
     return ingredients.fromJson(jsonDecode(response.body));
   } else {
@@ -155,10 +164,20 @@ Future<instructions> getInstructions(int id) async {
 }
 
 void main() {
-  List sample = ['apples', 'cinnamon'];
+  List sample = ['apples', 'flour', 'sugar'];
   int id = 0;
   Future<receipes> r1 = getReceipes(sample);
   r1.then((value) {
-    print(value.procedures);
+    receipe R = value.procedures[0];
+    print('////////////////////////Ingredients////////////////////////');
+    Future<ingredients> I = getIngredients(R.id);
+    I.then((value) {
+      print(value.details);
+    });
+    print('/////////////////////////Instructions//////////////////////');
+    Future<instructions> II = getInstructions(R.id);
+    II.then((value) {
+      print(value.steps);
+    });
   });
 }
