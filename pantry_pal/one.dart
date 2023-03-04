@@ -4,24 +4,63 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class receipes {
+class receipe {
   final int id;
+  final String title;
   final String image;
   final int likes;
   final List missedIngredients;
 
-  const receipes(
+  const receipe(
       {required this.id,
+      required this.title,
       required this.image,
       required this.likes,
       required this.missedIngredients});
 
+  @override
+  String toString() {
+    return 'Name: $title, Image: $image, missed Ingredients: $missedIngredients';
+  }
+}
+
+class missedIngredient {
+  final String name;
+
+  const missedIngredient({
+    required this.name,
+  });
+
+  @override
+  String toString() {
+    return '$name';
+  }
+}
+
+class receipes {
+  final List<receipe> procedures;
+
+  const receipes({required this.procedures});
+
   factory receipes.fromJson(List<dynamic> json) {
-    return receipes(
-        id: json[0]['id'],
-        image: json[0]['image'],
-        likes: json[0]['likes'],
-        missedIngredients: json[0]['missedIngredients']);
+    int i = json.length;
+    List<receipe> temp = [];
+    for (int j = 0; j < i; j++) {
+      int k = json[j]['missedIngredientCount'];
+      List<missedIngredient> temp2 = [];
+      for (int l = 0; l < k; l++) {
+        temp2.add(missedIngredient(
+          name: json[j]['missedIngredients'][l]['orignal'],
+        ));
+      }
+      temp.add(receipe(
+          id: json[j]['id'],
+          title: json[j]['title'],
+          image: json[j]['image'],
+          likes: json[j]['likes'],
+          missedIngredients: temp2));
+    }
+    return receipes(procedures: temp);
   }
 }
 
@@ -55,6 +94,16 @@ class ingredients {
   }
 }
 
+class instructions {
+  final List steps;
+
+  const instructions({required this.steps});
+
+  factory instructions.fromJson(List<dynamic> json) {
+    return instructions(steps: json[0]['steps']);
+  }
+}
+
 Future<receipes> getReceipes(List ingredients) async {
   //function to get the receipe from a set of ingredients
   String attach = '';
@@ -72,7 +121,7 @@ Future<receipes> getReceipes(List ingredients) async {
   if (response.statusCode == 200) {
     return receipes.fromJson(jsonDecode(response.body));
   } else {
-    throw Exception('Failed to load data');
+    throw Exception('Failed to load receipes');
   }
 }
 
@@ -84,7 +133,24 @@ Future<ingredients> getIngredients(int id) async {
   if (response.statusCode == 200) {
     return ingredients.fromJson(jsonDecode(response.body));
   } else {
-    throw Exception('Failed to load data');
+    throw Exception('Failed to load receipe ingredients');
+  }
+}
+
+Future<instructions> getInstructions(int id) async {
+  //function to get the analyzed instructions for  a receipe
+  final response = await http.get(Uri.parse(
+      'https://api.spoonacular.com/recipes/' +
+          id.toString() +
+          '/analyzedInstructions?apiKey=a22788893f79434f8852f9589d773ce2'));
+  if (response.statusCode == 200) {
+    try {
+      return instructions.fromJson(jsonDecode(response.body));
+    } on RangeError catch (e) {
+      throw Exception(e);
+    }
+  } else {
+    throw Exception('Failed to load receipe instructions');
   }
 }
 
@@ -93,16 +159,6 @@ void main() {
   int id = 0;
   Future<receipes> r1 = getReceipes(sample);
   r1.then((value) {
-    id = value.id;
-  });
-  Future<ingredients> I = getIngredients(id);
-  I.then((value) {
-    List _details = [];
-    List details = value.details;
-    for (Map detail in details) {
-      _details.add(ingredient(
-          name: detail['name'], value: detail['amount']['metric']['value']));
-    }
-    print(_details);
+    print(value.procedures);
   });
 }
