@@ -47,8 +47,8 @@ class _receipePageState extends State<receipePage> {
               itemCount: widget.receipeDetail.missedIngredients.length,
               itemBuilder: (BuildContext context, index) {
                 return Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Text((index + 1).toString() + '. ' + widget.receipeDetail.missedIngredients[index].name),
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(widget.receipeDetail.missedIngredients[index].name),
                 );
               }),
           Padding(
