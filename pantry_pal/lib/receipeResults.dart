@@ -71,27 +71,52 @@ class bigCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-        margin: EdgeInsets.all(7),
         child: Container(
-            height: 100,
+            height: 250,
             width: 100,
             decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: NetworkImage(image), fit: BoxFit.cover)),
+                    colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.4), BlendMode.darken),
+                    image: NetworkImage(image), fit: BoxFit.cover)
+                    ),
             child: Column(
               children: [
+                SizedBox(
+                  height: 100,
+                ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(title),
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 19,
+                        color: Colors.white
+                        )
+                      ),
                   ],
                 ),
                 SizedBox(
-                  height: 150,
+                  height: 100,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [Icon(Icons.favorite), Text(likes.toString())],
+                Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Icon(
+                        Icons.favorite_border_outlined,
+                        color: Colors.white,
+                        ), 
+                      Text(
+                        likes.toString(),
+                        style: TextStyle(
+                          color: Colors.white
+                        )
+                        ),
+                        ],
+                  ),
                 )
               ],
             )));
