@@ -289,19 +289,10 @@ class _homePageState extends State<homePage> {
                                 children: [
                                   Image.network(iconUrl(response.forecasts[0]
                                       ['weather'][0]['icon'])),
-                                  // SizedBox(
-                                  //   height: 15,
-                                  // ),
                                   Image.network(iconUrl(response.forecasts[8]
                                       ['weather'][0]['icon'])),
-                                  // SizedBox(
-                                  //   height: 30,
-                                  // ),
                                   Image.network(iconUrl(response.forecasts[16]
                                       ['weather'][0]['icon'])),
-                                  // SizedBox(
-                                  //   height: 35,
-                                  // ),
                                   Image.network(iconUrl(response.forecasts[24]
                                       ['weather'][0]['icon'])),
                                   SizedBox(
@@ -309,9 +300,6 @@ class _homePageState extends State<homePage> {
                                   ),
                                   Image.network(iconUrl(response.forecasts[32]
                                       ['weather'][0]['icon'])),
-                                  // SizedBox(
-                                  //   height: 20,
-                                  // ),
                                 ],
                               ),
                               Column(
