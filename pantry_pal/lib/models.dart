@@ -90,6 +90,11 @@ class instructions {
   const instructions({required this.steps});
 
   factory instructions.fromJson(List<dynamic> json) {
-    return instructions(steps: json[0]['steps']);
+    int i = json[0]['steps'].length;
+    List temp = [];
+    for (int j = 0; j < i; j++) {
+      temp.add(json[0]['steps'][j]['step']);
+    }
+    return instructions(steps: temp);
   }
 }
