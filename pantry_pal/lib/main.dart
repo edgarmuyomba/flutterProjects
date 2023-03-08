@@ -16,6 +16,7 @@ class _pantryPalState extends State<pantryPal> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: homePage(),
     );
   }

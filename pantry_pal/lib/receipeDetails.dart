@@ -83,7 +83,9 @@ class _receipePageState extends State<receipePage> {
                             );
                           });
                     } else {
-                      throw Exception('Failed to load instructions');
+                      return Center(
+                        child: Text('Receipe Instructions currently unavailable')
+                      );
                     }
                   } else {
                     return Center();

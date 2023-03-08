@@ -21,6 +21,7 @@ class _receipeResultsState extends State<receipeResults> {
           icon: Icon(Icons.arrow_back_rounded),
           onPressed: () => Navigator.pop(context),
         ),
+        title: Text('Pantry Pal'),
       ),
       body: Center(
         child: FutureBuilder(
@@ -43,7 +44,9 @@ class _receipeResultsState extends State<receipeResults> {
                         }),
                   ));
                 } else {
-                  throw Exception('Failed to load receipes');
+                  return Center(
+                        child: Text("Receipe's currently unavailable")
+                      );
                 }
               } else {
                 return CircularProgressIndicator();
