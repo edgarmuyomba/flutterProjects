@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pantry_pal/favorites.dart';
 import 'receipeResults.dart';
 import 'dart:math';
 
@@ -27,8 +28,8 @@ class _homePageState extends State<homePage> {
     bgImage = images[randIndex];
     return Container(
       decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage(bgImage), fit: BoxFit.cover)),
+          image:
+              DecorationImage(image: AssetImage(bgImage), fit: BoxFit.cover)),
       child: Scaffold(
           backgroundColor: Colors.transparent,
           body: Center(
@@ -37,59 +38,79 @@ class _homePageState extends State<homePage> {
             child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Pantry Pal',
-                      style: TextStyle(
-                          fontSize: 50,
-                          fontFamily: 'Satisfy',
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white)),
-                  TextFormField(
-                    style: TextStyle(
-                      color: Colors.white
-                    ),
-                    decoration: InputDecoration(
-                        labelText: 'Enter your ingredients',
-                        labelStyle: TextStyle(color: Colors.white),
-                        suffixIcon: Icon(Icons.search),
-                        suffixIconColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25.0),
-                            borderSide: BorderSide(
-                              color: Colors.white,
-                            ))),
-                    validator: (value) {
-                      if (value!.contains('and')) {
-                        return 'Remove all illegal terms from the sequence of ingredients';
-                      } else if (!(value.length > 0)) {
-                        return 'This is a required field';
-                      } else {
-                        return null;
-                      }
-                    },
-                    onSaved: (value) {
-                      attached = clean(value);
-                    },
+                  SizedBox(
+                    height: 40,
                   ),
-                  ElevatedButton(
-                    child: Text('Search'),
-                    style: ButtonStyle(
-                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25.0)))),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        _formKey.currentState!.save();
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    receipeResults(attached: attached)));
-                      }
-                    },
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(
+                          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => favoritesPage())),
+                          icon: Icon(
+                            Icons.favorite,
+                            color: Colors.white,
+                          ))
+                    ],
+                  ),
+                  SizedBox(
+                    height: 250,
+                  ),
+                  Column(
+                    children: [
+                      Text('Pantry Pal',
+                          style: TextStyle(
+                              fontSize: 50,
+                              fontFamily: 'Satisfy',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white)),
+                      TextFormField(
+                        style: TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                            labelText: 'Enter your ingredients',
+                            labelStyle: TextStyle(color: Colors.white),
+                            suffixIcon: Icon(Icons.search),
+                            suffixIconColor: Colors.white,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(25.0),
+                                borderSide: BorderSide(
+                                  color: Colors.white,
+                                ))),
+                        validator: (value) {
+                          if (value!.contains('and')) {
+                            return 'Remove all illegal terms from the sequence of ingredients';
+                          } else if (!(value.length > 0)) {
+                            return 'This is a required field';
+                          } else {
+                            return null;
+                          }
+                        },
+                        onSaved: (value) {
+                          attached = clean(value);
+                        },
+                      ),
+                      ElevatedButton(
+                        child: Text('Search'),
+                        style: ButtonStyle(
+                            shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.circular(25.0)))),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        receipeResults(attached: attached)));
+                          }
+                        },
+                      ),
+                    ],
                   )
                 ],
               ),
