@@ -17,6 +17,12 @@ class _pantryPalState extends State<pantryPal> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      themeMode: ThemeMode.dark,
+      theme: ThemeData(
+        brightness: Brightness.dark,
+        primaryColor: Colors.indigo[900],
+        accentColor: Colors.deepOrange
+      ),
       home: homePage(),
     );
   }
