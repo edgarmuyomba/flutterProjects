@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pantry_pal/models.dart';
 import 'homePage.dart';
 import 'package:provider/provider.dart';
 
@@ -32,14 +33,14 @@ class _pantryPalState extends State<pantryPal> {
 }
 
 class pantryPalState extends ChangeNotifier {
-  List<int> favourites = [];
+  List<receipe> favourites = [];
 
-  void addFavourites(int current) {
+  void addFavourites(receipe current) {
     favourites.add(current);
     notifyListeners();
   }
 
-  void removeFavourites(int current) {
+  void removeFavourites(receipe current) {
     favourites.remove(current);
     notifyListeners();
   }

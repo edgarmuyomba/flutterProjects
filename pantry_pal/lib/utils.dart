@@ -6,32 +6,27 @@ import 'dart:convert';
 import 'models.dart';
 
 class bigCard extends StatelessWidget {
-  final int id;
-  final String title;
-  final String image;
-  final int likes;
+  final receipe receipeDetail;
 
-  const bigCard(
-      {super.key,
-      required this.id,
-      required this.title,
-      required this.image,
-      required this.likes});
+  const bigCard({
+    super.key,
+    required this.receipeDetail,
+  });
 
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<pantryPalState>();
-    List<int> favourites = appState.favourites;
+    List<receipe> favourites = appState.favourites;
 
     return Card(
         child: Container(
-            height: 280,
+            height: 300,
             width: 100,
             decoration: BoxDecoration(
                 image: DecorationImage(
                     colorFilter: ColorFilter.mode(
                         Colors.black.withOpacity(0.4), BlendMode.darken),
-                    image: NetworkImage(image),
+                    image: NetworkImage(receipeDetail.image),
                     fit: BoxFit.cover)),
             child: Column(
               children: [
@@ -41,11 +36,14 @@ class bigCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(title,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 19,
-                            color: Colors.white)),
+                    Flexible(
+                      child: Text(receipeDetail.title,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 19,
+                              color: Colors.white)),
+                    ),
                   ],
                 ),
                 SizedBox(
@@ -57,14 +55,21 @@ class bigCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       IconButton(
-                        onPressed: () => favourites.contains(id) ? appState.removeFavourites(id) : appState.addFavourites(id),
-                        icon: favourites.contains(id) ? Icon(Icons.favorite) : Icon(Icons.favorite_border_outlined),
-                        color: favourites.contains(id) ? Colors.red : Colors.white,
+                        onPressed: () => favourites.contains(receipeDetail)
+                            ? appState.removeFavourites(receipeDetail)
+                            : appState.addFavourites(receipeDetail),
+                        icon: favourites.contains(receipeDetail)
+                            ? Icon(Icons.favorite)
+                            : Icon(Icons.favorite_border_outlined),
+                        color: favourites.contains(receipeDetail)
+                            ? Colors.red
+                            : Colors.white,
                       ),
                       Text(
-                        favourites.contains(id) ? (likes + 1).toString() : likes.toString(),
-                          style: TextStyle(color: Colors.white)
-                          ),
+                          favourites.contains(receipeDetail)
+                              ? (receipeDetail.likes + 1).toString()
+                              : receipeDetail.likes.toString(),
+                          style: TextStyle(color: Colors.white)),
                     ],
                   ),
                 )
@@ -76,7 +81,7 @@ class bigCard extends StatelessWidget {
 Future<receipes> getReceipes(String attached) async {
   //function to get receipes that fit particular ingredients
   final response = await http.get(Uri.parse(
-      'https://api.spoonacular.com/recipes/findByIngredients?ingredients=apples,+' +
+      'https://api.spoonacular.com/recipes/findByIngredients?ingredients=' +
           attached +
           '&number=10&ranking=1&ignorePantry=false&apiKey=a22788893f79434f8852f9589d773ce2'));
   if (response.statusCode == 200) {

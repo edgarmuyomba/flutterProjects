@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pantry_pal/utils.dart';
 import 'models.dart';
+import 'package:pantry_pal/main.dart';
+import 'package:provider/provider.dart';
 
 class receipePage extends StatefulWidget {
   final receipe receipeDetail;
@@ -13,6 +15,9 @@ class receipePage extends StatefulWidget {
 class _receipePageState extends State<receipePage> {
   @override
   Widget build(BuildContext context) {
+    var appState = context.watch<pantryPalState>();
+    List<receipe> favourites = appState.favourites;
+
     return Scaffold(
         appBar: AppBar(
           title:
@@ -21,6 +26,13 @@ class _receipePageState extends State<receipePage> {
             onPressed: () => Navigator.pop(context),
             icon: Icon(Icons.arrow_back_outlined),
           ),
+          actions: [
+            IconButton(
+              onPressed: () => favourites.contains(widget.receipeDetail) ? appState.removeFavourites(widget.receipeDetail) : appState.addFavourites(widget.receipeDetail), 
+              icon: favourites.contains(widget.receipeDetail) ? Icon(Icons.favorite) : Icon(Icons.favorite_border_outlined),
+              color: favourites.contains(widget.receipeDetail) ? Colors.red : Colors.white,
+              )
+          ],
         ),
         body: Center(
             child: Column(children: [

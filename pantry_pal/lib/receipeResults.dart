@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pantry_pal/receipeDetails.dart';
-import 'package:pantry_pal/main.dart';
-import 'package:provider/provider.dart';
 import 'models.dart';
 import 'utils.dart';
 
@@ -17,8 +15,6 @@ class _receipeResultsState extends State<receipeResults> {
   @override
   Widget build(BuildContext context) {
     String attached = widget.attached;
-    var appState = context.watch<pantryPalState>();
-    List<int> favourites = appState.favourites;
 
     return Scaffold(
       appBar: AppBar(
@@ -40,19 +36,20 @@ class _receipeResultsState extends State<receipeResults> {
                         itemCount: snapshot.data!.procedures.length,
                         itemBuilder: (BuildContext context, int index) {
                           return GestureDetector(
-                            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => receipePage(receipeDetail: snapshot.data!.procedures[index]))),
-                            child: bigCard(
-                                id: snapshot.data!.procedures[index].id,
-                                title: snapshot.data!.procedures[index].title,
-                                image: snapshot.data!.procedures[index].image,
-                                likes: snapshot.data!.procedures[index].likes),
-                          );
+                              onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          receipePage(
+                                              receipeDetail: snapshot
+                                                  .data!.procedures[index]))),
+                              child: bigCard(
+                                receipeDetail: snapshot.data!.procedures[index],
+                              ));
                         }),
                   ));
                 } else {
-                  return Center(
-                        child: Text("Receipe's currently unavailable")
-                      );
+                  return Center(child: Text("Receipe's currently unavailable"));
                 }
               } else {
                 return CircularProgressIndicator();
