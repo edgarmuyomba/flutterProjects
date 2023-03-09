@@ -1,24 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:pantry_pal/main.dart';
+import 'package:provider/provider.dart';
 import 'dart:convert';
 import 'models.dart';
 
 class bigCard extends StatelessWidget {
+  final int id;
   final String title;
   final String image;
   final int likes;
 
   const bigCard(
       {super.key,
+      required this.id,
       required this.title,
       required this.image,
       required this.likes});
 
   @override
   Widget build(BuildContext context) {
+    var appState = context.watch<pantryPalState>();
+    List<int> favourites = appState.favourites;
+
     return Card(
         child: Container(
-            height: 250,
+            height: 280,
             width: 100,
             decoration: BoxDecoration(
                 image: DecorationImage(
@@ -49,12 +56,15 @@ class bigCard extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Icon(
-                        Icons.favorite_border_outlined,
-                        color: Colors.white,
+                      IconButton(
+                        onPressed: () => favourites.contains(id) ? appState.removeFavourites(id) : appState.addFavourites(id),
+                        icon: favourites.contains(id) ? Icon(Icons.favorite) : Icon(Icons.favorite_border_outlined),
+                        color: favourites.contains(id) ? Colors.red : Colors.white,
                       ),
-                      Text(likes.toString(),
-                          style: TextStyle(color: Colors.white)),
+                      Text(
+                        favourites.contains(id) ? (likes + 1).toString() : likes.toString(),
+                          style: TextStyle(color: Colors.white)
+                          ),
                     ],
                   ),
                 )

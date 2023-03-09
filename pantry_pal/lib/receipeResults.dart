@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pantry_pal/receipeDetails.dart';
+import 'package:pantry_pal/main.dart';
+import 'package:provider/provider.dart';
 import 'models.dart';
 import 'utils.dart';
 
@@ -15,6 +17,9 @@ class _receipeResultsState extends State<receipeResults> {
   @override
   Widget build(BuildContext context) {
     String attached = widget.attached;
+    var appState = context.watch<pantryPalState>();
+    List<int> favourites = appState.favourites;
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -37,6 +42,7 @@ class _receipeResultsState extends State<receipeResults> {
                           return GestureDetector(
                             onTap: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => receipePage(receipeDetail: snapshot.data!.procedures[index]))),
                             child: bigCard(
+                                id: snapshot.data!.procedures[index].id,
                                 title: snapshot.data!.procedures[index].title,
                                 image: snapshot.data!.procedures[index].image,
                                 likes: snapshot.data!.procedures[index].likes),
